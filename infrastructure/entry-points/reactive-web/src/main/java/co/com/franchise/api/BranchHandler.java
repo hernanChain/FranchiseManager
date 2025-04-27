@@ -38,4 +38,14 @@ public class BranchHandler {
         return branchUseCase.updateProductStock(franchiseName, branchName, productName, newStock)
                 .flatMap(branch -> ServerResponse.ok().bodyValue(branch));
     }
+
+    public Mono<ServerResponse> updateBranchName(ServerRequest request) {
+        String franchiseName = request.pathVariable("franchiseName");
+        String oldBranchName = request.pathVariable("oldBranchName");
+        String newBranchName = request.pathVariable("newBranchName");
+
+        return branchUseCase.updateBranchName(franchiseName, oldBranchName, newBranchName)
+                .flatMap(branch -> ServerResponse.ok().bodyValue(branch))
+                .switchIfEmpty(ServerResponse.notFound().build());
+    }
 }

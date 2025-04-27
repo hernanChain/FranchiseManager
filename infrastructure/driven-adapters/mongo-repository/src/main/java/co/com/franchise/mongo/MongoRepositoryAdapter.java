@@ -37,4 +37,12 @@ public class MongoRepositoryAdapter extends AdapterOperations<Franchise, Franchi
     public Mono<Franchise> saveFranchise(Franchise franchise) {
         return this.save(franchise);
     }
+
+    @Override
+    public Mono<Void> deleteFranchise(Franchise franchise) {
+        FranchiseMongoDBModel model = mapper.map(franchise, FranchiseMongoDBModel.class);
+        return this.repository.delete(model);
+    }
+
+
 }

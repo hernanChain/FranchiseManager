@@ -24,12 +24,26 @@ public class FranchiseUseCase {
                     return franchiseRepository.saveFranchise(franchise)
                             .thenReturn(branch);
                 });
-    };
+    }
 
     public Mono<Franchise> getFranchise(String franchiseName){
         return franchiseRepository.findFranchiseByName(franchiseName)
                 .switchIfEmpty(Mono.error(new FranchiseNotFoundException()));
-    };
+    }
+
+    public Mono<Franchise> updateFranchiseName(String oldName, String newName) {
+        return franchiseRepository.findFranchiseByName(oldName)
+                .flatMap(oldFranchise -> {
+                    Franchise newFranchise = Franchise.builder()
+                            .name(newName)
+                            .branches(oldFranchise.getBranches())
+                            .build();
+
+                    return franchiseRepository.saveFranchise(newFranchise)
+                            .then(franchiseRepository.deleteFranchise(oldFranchise))
+                            .thenReturn(newFranchise);
+                });
+    }
 
 
 

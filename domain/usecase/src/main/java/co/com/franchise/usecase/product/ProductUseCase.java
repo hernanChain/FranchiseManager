@@ -1,6 +1,9 @@
 package co.com.franchise.usecase.product;
 
+import co.com.franchise.model.branch.Branch;
+import co.com.franchise.model.exceptions.BranchNotFoundException;
 import co.com.franchise.model.exceptions.FranchiseNotFoundException;
+import co.com.franchise.model.exceptions.ProductNotFoundException;
 import co.com.franchise.model.franchise.gateways.FranchiseRepository;
 import co.com.franchise.model.product.Product;
 import co.com.franchise.model.product.ProductWithBranchDTO;
@@ -23,6 +26,6 @@ public class ProductUseCase {
                         .max(Comparator.comparing(Product::getStock))
                         .map(product -> new ProductWithBranchDTO(branch.getName(), product.getName(), product.getStock()))
                 ));
-    };
+    }
 
 }

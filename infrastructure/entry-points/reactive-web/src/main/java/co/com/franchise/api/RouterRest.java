@@ -21,11 +21,14 @@ public class RouterRest {
                 .POST("/api/franchises", franchiseHandler::createFranchise)
                 .POST("/api/franchises/{franchiseName}/branches", franchiseHandler::addBranchToFranchise)
                 .GET("/api/franchises/{franchiseName}", franchiseHandler::getFranchiseByName)
+                .PUT("/api/franchises/{oldName}/update/{newName}", franchiseHandler::updateFranchiseName)
 
                 // Branch Routes
                 .POST("/api/franchises/{franchiseName}/branches/{branchName}/products", branchHandler::addProductToBranch)
                 .DELETE("/api/franchises/{franchiseName}/branches/{branchName}/products/{productName}", branchHandler::deleteProductFromBranch)
                 .PUT("/api/franchises/{franchiseName}/branches/{branchName}/products/{productName}/stock", branchHandler::updateProductStock)
+                .PUT("/api/franchises/{franchiseName}/branches/{oldBranchName}/update/{newBranchName}", branchHandler::updateBranchName)
+
 
                 // Product Routes
                 .GET("/api/franchises/{franchiseName}/products/top-stock", productHandler::findTopStockProductPerBranch)

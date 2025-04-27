@@ -36,4 +36,13 @@ public class FranchiseHandler {
                 .switchIfEmpty(ServerResponse.notFound().build());
     }
 
+    public Mono<ServerResponse> updateFranchiseName(ServerRequest request) {
+        String oldName = request.pathVariable("oldName");
+        String newName = request.pathVariable("newName");
+
+        return franchiseUseCase.updateFranchiseName(oldName, newName)
+                .flatMap(franchise -> ServerResponse.ok().bodyValue(franchise))
+                .switchIfEmpty(ServerResponse.notFound().build());
+    }
+
 }

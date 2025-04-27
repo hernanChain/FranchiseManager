@@ -10,6 +10,9 @@ import co.com.franchise.model.product.Product;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 public class BranchUseCase {
 
@@ -62,4 +65,28 @@ public class BranchUseCase {
                 .findFirst()
                 .orElseThrow(BranchNotFoundException::new);
     }
+
+    public Mono<Branch> updateBranchName(String franchiseName, String oldBranchName, String newBranchName) {
+        return franchiseRepository.findFranchiseByName(franchiseName)
+                .flatMap(franchise -> {
+                    List<Branch> branches = franchise.getBranches();
+
+                    Branch branch = branches.stream()
+                            .filter(b -> b.getName().equals(oldBranchName))
+                            .findFirst()
+                            .orElseThrow(BranchNotFoundException::new);
+
+                    branch.setName(newBranchName);
+
+                    List<Branch> updatedBranches = branches.stream()
+                            .map(b -> b.getName().equals(oldBranchName) ? branch : b)
+                            .collect(Collectors.toList());
+
+                    franchise.setBranches(updatedBranches);
+
+                    return franchiseRepository.saveFranchise(franchise)
+                            .thenReturn(branch);
+                });
+    }
+
 }
