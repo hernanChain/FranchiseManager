@@ -1,4 +1,4 @@
-package co.com.bancolombia.config;
+package co.com.franchise.config;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

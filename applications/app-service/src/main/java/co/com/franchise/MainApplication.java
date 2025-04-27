@@ -1,4 +1,4 @@
-package co.com.bancolombia;
+package co.com.franchise;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
