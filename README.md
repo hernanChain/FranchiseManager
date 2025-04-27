@@ -1,47 +1,129 @@
-# Proyecto Base Implementando Clean Architecture
 
-## Antes de Iniciar
+# Franchise Manager API
 
-Empezaremos por explicar los diferentes componentes del proyectos y partiremos de los componentes externos, continuando con los componentes core de negocio (dominio) y por último el inicio y configuración de la aplicación.
+Este proyecto proporciona una API para gestionar franquicias, sucursales y productos dentro de una franquicia. Permite crear franquicias, añadir sucursales, gestionar productos y realizar operaciones como modificar el stock de productos y obtener el producto con mayor stock en cada sucursal.
 
-Lee el artículo [Clean Architecture — Aislando los detalles](https://medium.com/bancolombia-tech/clean-architecture-aislando-los-detalles-4f9530f35d7a)
+## Requerimientos
 
-# Arquitectura
+Para ejecutar este proyecto, necesitas tener instalado lo siguiente en tu entorno local:
 
-![Clean Architecture](https://miro.medium.com/max/1400/1*ZdlHz8B0-qu9Y-QO3AXR_w.png)
+- **Java 21+** (JDK)
+- **Docker** (si deseas usar contenedores)
+- **Gradle** o **Maven** (para construir el proyecto)
 
-## Domain
+## Desplegar la aplicación en un entorno local
 
-Es el módulo más interno de la arquitectura, pertenece a la capa del dominio y encapsula la lógica y reglas del negocio mediante modelos y entidades del dominio.
+### 1. Clonar el repositorio
 
-## Usecases
+Primero, clona el repositorio en tu máquina local:
 
-Este módulo gradle perteneciente a la capa del dominio, implementa los casos de uso del sistema, define lógica de aplicación y reacciona a las invocaciones desde el módulo de entry points, orquestando los flujos hacia el módulo de entities.
+```bash
+git clone https://github.com/tu-usuario/franchise-manager.git
+cd franchise-manager
+```
 
-## Infrastructure
+### 2. Construir el proyecto
 
-### Helpers
 
-En el apartado de helpers tendremos utilidades generales para los Driven Adapters y Entry Points.
+```bash
+./gradlew build
+```
 
-Estas utilidades no están arraigadas a objetos concretos, se realiza el uso de generics para modelar comportamientos
-genéricos de los diferentes objetos de persistencia que puedan existir, este tipo de implementaciones se realizan
-basadas en el patrón de diseño [Unit of Work y Repository](https://medium.com/@krzychukosobudzki/repository-design-pattern-bc490b256006)
+### 3. Ejecutar el proyecto localmente
 
-Estas clases no puede existir solas y debe heredarse su compartimiento en los **Driven Adapters**
+Para ejecutar la aplicación en tu entorno local, usa el siguiente comando:
 
-### Driven Adapters
+```bash
+./gradlew bootRun
+```
 
-Los driven adapter representan implementaciones externas a nuestro sistema, como lo son conexiones a servicios rest,
-soap, bases de datos, lectura de archivos planos, y en concreto cualquier origen y fuente de datos con la que debamos
-interactuar.
+Esto levantará el servidor en el puerto `8080` por defecto.
 
-### Entry Points
+### 4. Acceder a la API
 
-Los entry points representan los puntos de entrada de la aplicación o el inicio de los flujos de negocio.
+Una vez que la aplicación esté en ejecución, podrás acceder a la API en la siguiente URL:
 
-## Application
+```
+http://localhost:8080
+```
 
-Este módulo es el más externo de la arquitectura, es el encargado de ensamblar los distintos módulos, resolver las dependencias y crear los beans de los casos de use (UseCases) de forma automática, inyectando en éstos instancias concretas de las dependencias declaradas. Además inicia la aplicación (es el único módulo del proyecto donde encontraremos la función “public static void main(String[] args)”.
+### 5. Probar la API
 
-**Los beans de los casos de uso se disponibilizan automaticamente gracias a un '@ComponentScan' ubicado en esta capa.**
+Puedes probar las siguientes rutas de la API:
+
+- **Crear una franquicia:**
+  - `POST /api/franchises`
+  - Cuerpo: `{ "name": "Nombre de la franquicia" }`
+
+- **Agregar una sucursal a una franquicia:**
+  - `POST /api/franchises/{franchiseName}/branches`
+  - Cuerpo: `{ "name": "Nombre de la sucursal" }`
+
+- **Agregar un producto a una sucursal:**
+  - `POST /api/franchises/{franchiseName}/branches/{branchName}/products`
+  - Cuerpo: `{ "name": "Producto", "stock": 10 }`
+
+- **Eliminar un producto de una sucursal:**
+  - `DELETE /api/franchises/{franchiseName}/branches/{branchName}/products/{productName}`
+
+- **Actualizar stock de un producto:**
+  - `PUT /api/franchises/{franchiseName}/branches/{branchName}/products/{productName}/stock`
+  - Cuerpo: `{ "stock": 20 }`
+
+- **Obtener el producto con más stock por sucursal de una franquicia:**
+  - `GET /api/franchises/{franchiseName}/products/top-stock`
+
+## Desplegar la aplicación con Docker
+
+Si prefieres usar Docker para desplegar la aplicación, sigue estos pasos:
+
+### 1. Crear la imagen de Docker
+
+Primero, construye la imagen de Docker ejecutando:
+
+```bash
+docker build -t franchisemanager .
+```
+
+Este comando construirá la imagen usando el `Dockerfile` en la carpeta deployment del proyecto.
+
+### 2. Ejecutar el contenedor de Docker
+
+Una vez que la imagen haya sido creada, puedes ejecutar el contenedor con el siguiente comando:
+
+```bash
+docker run -p 8080:8080 franchisemanager
+```
+
+Esto iniciará la aplicación dentro de un contenedor y estará disponible en el puerto `8080`.
+
+### 3. Acceder a la API
+
+Al igual que en el entorno local, puedes acceder a la API en la siguiente URL:
+
+```
+http://localhost:8080
+```
+
+## Configuración de MongoDB
+
+Este proyecto utiliza **MongoDB** como base de datos. Para que la aplicación funcione correctamente, debes tener una instancia de MongoDB en funcionamiento.
+
+### Usando Docker para MongoDB
+
+Si no tienes MongoDB instalado en tu máquina, puedes correrlo usando Docker con el siguiente comando:
+
+```bash
+docker run --name mongodb -d -p 27017:27017 mongo:latest
+```
+
+Esto levantará un contenedor de MongoDB en el puerto `27017` y lo vinculará a tu aplicación.
+
+## Contribuciones
+
+Las contribuciones son bienvenidas. Si tienes alguna sugerencia, corrección o nueva característica que te gustaría agregar, por favor abre un **issue** o un **pull request**.
+
+## Licencia
+
+Este proyecto está bajo la **MIT License** - ver el archivo [LICENSE](LICENSE) para más detalles.
+
