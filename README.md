@@ -9,7 +9,7 @@ Para ejecutar este proyecto, necesitas tener instalado lo siguiente en tu entorn
 
 - **Java 21+** (JDK)
 - **Docker** (si deseas usar contenedores)
-- **Gradle** o **Maven** (para construir el proyecto)
+- **Gradle** (para construir el proyecto)
 
 ## Desplegar la aplicación en un entorno local
 
@@ -18,8 +18,8 @@ Para ejecutar este proyecto, necesitas tener instalado lo siguiente en tu entorn
 Primero, clona el repositorio en tu máquina local:
 
 ```bash
-git clone https://github.com/tu-usuario/franchise-manager.git
-cd franchise-manager
+git clone https://github.com/hernanChain/FranchiseManager.git
+cd FranchiseManager
 ```
 
 ### 2. Construir el proyecto
@@ -82,7 +82,7 @@ Si prefieres usar Docker para desplegar la aplicación, sigue estos pasos:
 Primero, construye la imagen de Docker ejecutando:
 
 ```bash
-docker build -t franchisemanager .
+docker build -t franchise_manager .
 ```
 
 Este comando construirá la imagen usando el `Dockerfile` en la carpeta deployment del proyecto.
@@ -92,7 +92,7 @@ Este comando construirá la imagen usando el `Dockerfile` en la carpeta deployme
 Una vez que la imagen haya sido creada, puedes ejecutar el contenedor con el siguiente comando:
 
 ```bash
-docker run -p 8080:8080 franchisemanager
+docker compose up
 ```
 
 Esto iniciará la aplicación dentro de un contenedor y estará disponible en el puerto `8080`.
