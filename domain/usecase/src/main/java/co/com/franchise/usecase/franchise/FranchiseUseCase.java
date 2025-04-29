@@ -44,7 +44,4 @@ public class FranchiseUseCase {
                             .thenReturn(newFranchise);
                 });
     }
-
-
-
 }
